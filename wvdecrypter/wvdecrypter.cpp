@@ -161,6 +161,12 @@ WV_CencSingleSampleDecrypter::WV_CencSingleSampleDecrypter(std::string licenseUR
     return;
   }
 
+  if (pssh_size > 42 && pssh[pssh_size - 42] == 41 && pssh[pssh_size - 41] == 0x61)
+  {
+    pssh_.resize(pssh_size - 41);pssh_.back() = 0;
+    memset(&pssh_[4], 0xFF, 4);
+  };
+  
 #ifdef _DEBUG
   std::string strDbg = host->GetProfilePath();
   strDbg += "EDEF8BA9-79D6-4ACE-A3C8-27DCD51D21ED.init";
